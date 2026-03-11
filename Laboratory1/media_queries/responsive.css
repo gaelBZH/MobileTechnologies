@@ -20,3 +20,32 @@
 		}
 }
 
+/* My code */
+@media (max-width: 800px)
+{
+	#links{
+		width: 100%;
+		text-align: center;
+		background-color: transparent;
+	}
+
+	#wrapper{
+		height: auto;
+	}
+
+	li{
+		background-color: gray;
+		margin: 10px 0;
+	}
+}
+
+@media (max-width: 500px)
+{
+	#image{
+		width: 100%;
+	}
+
+	#wrapper{
+		width: 100%;
+	}
+}
