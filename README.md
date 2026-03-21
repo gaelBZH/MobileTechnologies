@@ -7,7 +7,7 @@ This course contains several languages and tools, such as **HTML** with **Bootst
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/1280px-HTML5_logo_and_wordmark.svg.png" width="123px" style="padding: 5px 10px"></img>
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/CSS3_logo_and_wordmark.svg/500px-CSS3_logo_and_wordmark.svg.png" width="87.5px" style="padding: 5px 20px 5px 0"></img>
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Kotlin_icon_%282021-present%29.svg/960px-Kotlin_icon_%282021-present%29.svg.png" width="100px" style="padding: 5px 10px"></img>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Kotlin_icon_%282021-present%29.svg/960px-Kotlin_icon_%282021-present%29.svg.png" width="100px" style="padding: 5px 30px 5px 10px"></img>
 
 ## Architecture ⚙️
 ```
