@@ -13,6 +13,7 @@ fun auraColor(studentPoints: Int = 2): Unit
     println(aura)
 }
 
+// Task 5
 fun printStudentStatus(name: String, auraColor: String)
 {
     println("$name has a $auraColor face color")
@@ -22,8 +23,6 @@ fun main()
 {
     // Task 1
     var hasCredit = false
-    
-
 
     // Task 2
     val universityName = "Politechnika Krakowska"
