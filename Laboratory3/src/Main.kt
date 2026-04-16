@@ -1,5 +1,3 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 fun main()
 {
     // 1. Lambdas
@@ -14,7 +12,7 @@ fun main()
     }
 
     // 3. Constructors
-    class Student_3(var name: String, var university: String = "PK")
+    class Student_3(var name: String = "Mike", var university: String = "PK")
     {
         init
         {
@@ -23,7 +21,7 @@ fun main()
     }
 
     // 4. Encapsulation & Class functions
-    class Student_4(private var name: String, private var university: String = "PK")
+    class Student_4(private var name: String = "Mike", private var university: String = "PK")
     {
         init
         {
@@ -38,11 +36,17 @@ fun main()
     // 5. Inheritance
     open class Person(val name: String)
 
-    class Student(name: String, private val university: String) : Person(name)
+    class Student(name: String = "Mike", private val university: String = "PK") : Person(name)
     {
         val showStudent = {println("Name: ${name.replaceFirstChar { it.uppercase() }}, University: $university")}
     }
 
     val student = Student("Mike", "Politechnika Krakowska")
     student.showStudent()
+
+    val student2 = Student("Boris", "Cracow University of Technology")
+    student2.showStudent()
+
+    val student3 = Student()
+    student3.showStudent()
 }
