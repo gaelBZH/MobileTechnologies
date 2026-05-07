@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Laboratorium Fragmentów</string>
+    <string name="btn_fragment_1">FRAGMENT 1</string>
+    <string name="btn_fragment_2">FRAGMENT 2</string>
+    <string name="content_f1">To jest zawartość Fragmentu 1</string>
+    <string name="content_f2">To jest zawartość Fragmentu 2</string>
+    <string name="label_f1">FRAGMENT 1</string>
+    <string name="label_f2">FRAGMENT 2</string>
+</resources>
