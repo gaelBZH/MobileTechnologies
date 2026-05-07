@@ -16,17 +16,20 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 
-class MainActivity : FragmentActivity() { // Hérite de FragmentActivity pour le FragmentManager [cite: 7]
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : FragmentActivity() // Inherits from FragmentActivity
+{
+    override fun onCreate(savedInstanceState: Bundle?)
+    {
         super.onCreate(savedInstanceState)
-        setContent {
+        setContent{
             MainScreen(onSwitchFragment = { id -> switchFragment(id) })
         }
     }
 
-    private fun switchFragment(id: Int) {
+    private fun switchFragment(id: Int)
+    {
+        // CHANGE FRAGMENT 1/2
         val fragment = if (id == 1) Fragment1() else Fragment2()
-        // Remplace dynamiquement le fragment [cite: 14, 21]
         supportFragmentManager.commit {
             replace(R.id.fragment_container, fragment)
             setReorderingAllowed(true)
@@ -34,37 +37,46 @@ class MainActivity : FragmentActivity() { // Hérite de FragmentActivity pour le
     }
 }
 
-@Composable
-fun MainScreen(onSwitchFragment: (Int) -> Unit) {
-    val config = LocalConfiguration.current // Détecte l'orientation [cite: 54]
 
-    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-        LandscapeLayout(onSwitchFragment) // Layout différent pour paysage [cite: 49]
-    } else {
-        PortraitLayout(onSwitchFragment) // Layout différent pour portrait [cite: 49]
-    }
+
+// landscape or portrait
+@Composable
+fun MainScreen(onSwitchFragment: (Int) -> Unit)
+{
+    val config = LocalConfiguration.current
+
+    if (config.orientation == Configuration.ORIENTATION_LANDSCAPE)
+        LandscapeLayout(onSwitchFragment) // landscape
+    else
+        PortraitLayout(onSwitchFragment) // portrait
 }
 
 @Composable
-fun PortraitLayout(onSwitchFragment: (Int) -> Unit) {
-    Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+fun PortraitLayout(onSwitchFragment: (Int) -> Unit)
+{
+    Column(modifier = Modifier.fillMaxSize().padding(16.dp))
+    {
         AndroidView(
             factory = { context -> FrameLayout(context).apply { id = R.id.fragment_container } },
             modifier = Modifier.weight(1f).fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(8.dp))
-        Button(onClick = { onSwitchFragment(1) }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { onSwitchFragment(1) }, modifier = Modifier.fillMaxWidth())
+        {
             Text(stringResource(R.string.btn_fragment_1))
         }
-        Button(onClick = { onSwitchFragment(2) }, modifier = Modifier.fillMaxWidth()) {
+        Button(onClick = { onSwitchFragment(2) }, modifier = Modifier.fillMaxWidth())
+        {
             Text(stringResource(R.string.btn_fragment_2))
         }
     }
 }
 
 @Composable
-fun LandscapeLayout(onSwitchFragment: (Int) -> Unit) {
-    Row(modifier = Modifier.fillMaxSize().padding(16.dp)) {
+fun LandscapeLayout(onSwitchFragment: (Int) -> Unit)
+{
+    Row(modifier = Modifier.fillMaxSize().padding(16.dp))
+    {
         AndroidView(
             factory = { context -> FrameLayout(context).apply { id = R.id.fragment_container } },
             modifier = Modifier.weight(1f).fillMaxHeight()

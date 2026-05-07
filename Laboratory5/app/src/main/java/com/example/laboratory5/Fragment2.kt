@@ -15,7 +15,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 
-class Fragment2 : Fragment() {
+class Fragment2 : Fragment()
+{
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -23,13 +24,13 @@ class Fragment2 : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                MaterialTheme { // Utilise Material 3 [cite: 25]
-                    Column( // Contient au moins une Column [cite: 28]
+                MaterialTheme { // Material 3
+                    Column( // at least 1 Column
                         modifier = Modifier.fillMaxSize(),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(text = stringResource(id = R.string.content_f2)) // Texte depuis ressources [cite: 27, 72]
+                        Text(text = stringResource(id = R.string.content_f2)) // Texte from ressources
                         Text(
                             text = stringResource(id = R.string.label_f2),
                             color = Color.Red,
