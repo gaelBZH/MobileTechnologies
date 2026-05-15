@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Laboratory4</string>
+    <string name="app_name">Laboratory5</string>
     <string name="btn_fragment_1">FRAGMENT 1</string>
     <string name="btn_fragment_2">FRAGMENT 2</string>
     <string name="content_f1">This is content of Fragment 1</string>
