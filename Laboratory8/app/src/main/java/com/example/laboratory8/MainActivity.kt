@@ -3,42 +3,30 @@ package com.example.laboratory8
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Initialisation de Room et du Repository
         val database = StudentDatabase.getDatabase(this)
         val repository = StudentRepository(database.studentDao())
 
@@ -55,78 +43,146 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudentApp(repository: StudentRepository) {
     val viewModel: StudentViewModel = viewModel(
         factory = StudentViewModelFactory(repository)
     )
 
-    val studentList by viewModel.students.collectAsState()
+    val students by viewModel.students.collectAsState()
 
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        OutlinedTextField(
-            value = firstName,
-            onValueChange = { firstName = it },
-            label = { Text("First name") },
-            modifier = Modifier.fillMaxWidth()
-        )
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        OutlinedTextField(
-            value = lastName,
-            onValueChange = { lastName = it },
-            label = { Text("Last name") },
-            modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(
-            onClick = {
-                viewModel.addStudent(firstName, lastName)
-                firstName = ""
-                lastName = ""
-            },
-            modifier = Modifier.fillMaxWidth()
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Students") },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color(0xFF6200EA),
+                    titleContentColor = Color.White
+                )
+            )
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(16.dp)
         ) {
-            Text("Add student")
-        }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            OutlinedTextField(
+                value = firstName,
+                onValueChange = { firstName = it },
+                label = { Text("First Name") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "First Name Icon") },
+                modifier = Modifier.fillMaxWidth()
+            )
 
-        LazyColumn {
-            items(studentList) { student ->
-                Card(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 4.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text("${student.firstName} ${student.lastName}")
+            Spacer(modifier = Modifier.height(8.dp))
 
-                        IconButton(onClick = { viewModel.removeStudent(student) }) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Delete student"
-                            )
+            OutlinedTextField(
+                value = lastName,
+                onValueChange = { lastName = it },
+                label = { Text("Last Name") },
+                leadingIcon = { Icon(Icons.Default.Person, contentDescription = "Last Name Icon") },
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    if (firstName.isNotBlank() && lastName.isNotBlank()) {
+                        viewModel.addStudent(firstName, lastName)
+
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar("Student added")
                         }
+
+                        firstName = ""
+                        lastName = ""
                     }
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6200EA))
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add Icon")
+                Spacer(modifier = Modifier.width(8.dp))
+                Text("ADD STUDENT")
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+            Text("Student list:", color = Color.Gray, fontSize = 14.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+
+            LazyColumn(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(students, key = { it.id }) { student ->
+                    StudentItem(
+                        student = student,
+                        onDeleteClick = { viewModel.removeStudent(student) }
+                    )
+                    HorizontalDivider(color = Color.LightGray, thickness = 0.5.dp)
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun StudentItem(student: Student, onDeleteClick: () -> Unit) {
+    val initials = "${student.firstName.firstOrNull() ?: ""}${student.lastName.firstOrNull() ?: ""}".uppercase()
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(40.dp)
+                .background(Color(0xFF6200EA), shape = CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = initials,
+                color = Color.White,
+                fontWeight = FontWeight.Bold
+            )
+        }
+
+        Spacer(modifier = Modifier.width(16.dp))
+
+        // Informations de l'étudiant
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = student.firstName,
+                fontWeight = FontWeight.Bold,
+                fontSize = 16.sp
+            )
+            Text(
+                text = student.lastName,
+                color = Color.Gray,
+                fontSize = 14.sp
+            )
+        }
+
+        // Bouton
+        IconButton(onClick = onDeleteClick) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete Student",
+                tint = Color.Gray
+            )
         }
     }
 }
