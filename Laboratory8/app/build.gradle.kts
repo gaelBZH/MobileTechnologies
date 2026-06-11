@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp) // Use the alias defined in toml
+    alias(libs.plugins.ksp)
 }
 
 android {
